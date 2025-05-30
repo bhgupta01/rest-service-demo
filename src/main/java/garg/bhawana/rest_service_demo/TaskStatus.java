@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 public enum TaskStatus {
     TODO("todo"),
     IN_PROGRESS("in-progress"),
@@ -16,13 +18,12 @@ public enum TaskStatus {
         this.displayValue = displayValue;
     }
 
+    @JsonCreator
     public static TaskStatus from(String str) {
-        final Optional<TaskStatus> status = Arrays.stream(TaskStatus.values())
+        return Arrays.stream(TaskStatus.values())
                 .filter(v -> v.displayValue.equals(str))
-                .findAny();
-        if (status.isPresent())
-            return status.get();
-        throw new EnumConstantNotPresentException(TaskStatus.class, str);
+                .findFirst()
+                .orElseThrow(() -> new InvalidTaskStatusException());
     }
 
     public static List<String> displayValues() {

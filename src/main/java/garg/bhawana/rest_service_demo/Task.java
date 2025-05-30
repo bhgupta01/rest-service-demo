@@ -3,16 +3,31 @@ package garg.bhawana.rest_service_demo;
 import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+
+@Entity
 public class Task {
+    @Id
+    @GeneratedValue
     private UUID id;
     private String description;
     private TaskStatus status;
-    private long createdAt;
-    private long updatedAt;
+    private Long createdAt;
+    private Long updatedAt;
+
+    // for JPA
+    public Task() {
+    }
 
     public Task(String description) {
-        this.id = UUID.randomUUID();
         this.description = description;
+    }
+
+    @PrePersist
+    public void beforePersisting() {
         this.status = TaskStatus.TODO;
         this.createdAt = System.currentTimeMillis();
         this.updatedAt = createdAt;
