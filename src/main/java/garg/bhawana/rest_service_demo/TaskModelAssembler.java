@@ -19,9 +19,7 @@ public class TaskModelAssembler implements RepresentationModelAssembler<Task, En
         final EntityModel<Task> model = EntityModel.of(
                 entity,
                 linkTo(methodOn(TaskController.class).fetch(id))
-                        .withSelfRel(),
-                linkTo(methodOn(TaskController.class).fetch())
-                        .withRel("all"));
+                        .withSelfRel());
 
         if(entity.getStatus().equals(TaskStatus.TODO)) {
                 model.add(linkTo(methodOn(TaskController.class).update(description, TaskStatus.IN_PROGRESS, id))

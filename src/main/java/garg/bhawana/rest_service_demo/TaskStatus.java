@@ -2,7 +2,6 @@ package garg.bhawana.rest_service_demo;
 
 import java.util.List;
 import java.util.Arrays;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonCreator;

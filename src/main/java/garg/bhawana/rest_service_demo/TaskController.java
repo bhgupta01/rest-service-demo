@@ -1,9 +1,10 @@
 package garg.bhawana.rest_service_demo;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -81,13 +82,14 @@ public class TaskController {
     }
 
     @GetMapping("/tasks")
-    public CollectionModel<EntityModel<Task>> fetch() {
-        List<EntityModel<Task>> result = repo.findAll().stream()
-                .map(assembler::toModel)
-                .collect(Collectors.toList());
-
+    public CollectionModel<EntityModel<Task>> fetch(@RequestParam TaskStatus status) {
+        Iterator<Task> tasks = repo.findByStatus(status).iterator();
+        List<EntityModel<Task>> result = new ArrayList<>();
+        while(tasks.hasNext()) {
+            result.add(assembler.toModel(tasks.next()));
+        }
         return CollectionModel.of(
                 result,
-                linkTo(methodOn(TaskController.class).fetch()).withSelfRel());
+                linkTo(methodOn(TaskController.class).fetch(status)).withSelfRel());
     }
 }
